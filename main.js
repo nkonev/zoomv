@@ -1,24 +1,82 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import {debounce} from "lodash";
+import {largestRect, largestSquare} from "rect-scaler";
 
 document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
+    <div id="gallery">
+      <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div>
+      <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div>
+      <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div>
+      <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div>
+      <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div>
+      <!-- <div class="video-container">
+        <video
+          autoplay
+          loop
+          muted
+          src="https://dosant.github.io/video.mp4"
+        ></video>
+      </div> -->
     </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
 `
 
-setupCounter(document.querySelector('#counter'))
+function recalculateLayout() {
+    const gallery = document.getElementById("gallery");
+    const screenWidth = document.body.getBoundingClientRect().width;
+    const screenHeight = document.body.getBoundingClientRect().height;
+    const videoCount = document.getElementsByTagName("video").length;
+
+    const rectWidth = 16;
+    const rectHeight = 9;
+    const r = largestRect(
+        screenWidth,
+        screenHeight,
+        videoCount,
+        rectWidth,
+        rectHeight
+    );
+
+    gallery.style.setProperty("--width", r.width + "px");
+    gallery.style.setProperty("--height", r.height + "px");
+    gallery.style.setProperty("--cols", r.cols + "");
+}
+
+const debouncedRecalculateLayout = debounce(recalculateLayout, 50);
+window.addEventListener("resize", debouncedRecalculateLayout);
+debouncedRecalculateLayout();
+
